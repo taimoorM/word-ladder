@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Keyboard from "./components/Keyboard";
 
 function App() {
   const [startWord, setStartWord] = useState<string>("");
@@ -22,23 +23,10 @@ function App() {
   };
 
   return (
-    <div>
-      <label>
-        Starting word:
-        <input type="text" value={startWord} onChange={handleStartWordChange} />
-      </label>
-      <label>
-        Ending word:
-        <input type="text" value={endWord} onChange={handleEndWordChange} />
-      </label>
-      <button onClick={handleGenerateWordLadder}>Generate Word Ladder</button>
-      {wordLadder.length > 0 && (
-        <ul>
-          {wordLadder.map((word) => (
-            <li>{word}</li>
-          ))}
-        </ul>
-      )}
+    <div className="container flex justify-center items-center h-screen mx-auto">
+      <div className="bg-gray-950">
+        <Keyboard />
+      </div>
     </div>
   );
 }
