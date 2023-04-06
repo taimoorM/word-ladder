@@ -6,20 +6,15 @@ function App() {
   const [endWord, setEndWord] = useState<string>("");
   const [wordLadder, setWordLadder] = useState([]);
 
-  const handleStartWordChange = (event: any): void => {
-    setStartWord(event.target.value);
-  };
-
-  const handleEndWordChange = (event: any) => {
-    setEndWord(event.target.value);
-  };
-
   const handleGenerateWordLadder = async () => {
     // Connect to API to get list of valid English words
-    const response = await fetch(`https://random-word-api.herokuapp.com/word`);
+    const response = await fetch(
+      `https://random-word-api.herokuapp.com/word?number=2&length=5`
+    );
     const data = await response.json();
     const validWords = data;
-    console.log(validWords);
+    setStartWord(validWords[0]);
+    setEndWord(validWords[1]);
   };
 
   return (
@@ -27,6 +22,9 @@ function App() {
       <div className="bg-gray-950">
         <Keyboard />
       </div>
+      {startWord}
+      {endWord}
+      <button onClick={handleGenerateWordLadder}>CLICK</button>
     </div>
   );
 }
