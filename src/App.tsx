@@ -1,14 +1,20 @@
 import { useState } from "react";
 import Keyboard from "./components/Keyboard";
 
-type selectedLetterType = number | null;
+type letterPositionType = number | null;
 
 function App() {
   const [startWord, setStartWord] = useState<string>("");
   const [endWord, setEndWord] = useState<string>("");
   const [letterBoard, setLetterBoard] = useState([]);
-  const [selectedLetter, setSelectedLetter] =
-    useState<selectedLetterType>(null);
+  const [letterPosition, setLetterPosition] =
+    useState<letterPositionType>(null);
+  const [letter, setLetter] = useState<string>("");
+
+  const handleLetterChange = (letter: string) => {
+    setLetter(letter);
+    console.log(letter);
+  };
 
   const handleGenerateWordLadder = async () => {
     // Connect to API to get list of valid English words
@@ -23,7 +29,7 @@ function App() {
   };
 
   const handleLetterClick = (index: number) => {
-    setSelectedLetter(index);
+    setLetterPosition(index);
   };
 
   return (
@@ -52,7 +58,7 @@ function App() {
           ))}
         </div>
         <div className="bg-gray-950">
-          <Keyboard />
+          <Keyboard handleLetterChange={handleLetterChange} />
         </div>
         <button onClick={handleGenerateWordLadder}>CLICK</button>
       </div>
