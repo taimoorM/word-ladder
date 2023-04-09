@@ -4,60 +4,90 @@ import Keyboard from "./components/Keyboard";
 type letterPositionType = number | null;
 
 function App() {
-  const [wordsDisplayed, setWordsDisplayed] = useState([]);
-  const [letterBoard, setLetterBoard] = useState([]);
-  const [letterPosition, setLetterPosition] =
-    useState<letterPositionType>(null);
-  const [letter, setLetter] = useState<string>("");
+  const [wordOne, setWordOne] = useState([]);
+  const [wordTwo, setWordTwo] = useState([]);
+  const [wordThree, setWordThree] = useState([]);
+  const [wordBoard, setWordBoard] = useState<string[]>([]);
+  const [wordInput, setWordInput] = useState<string>("");
 
-  const handleLetterChange = (letter: string) => {
-    setLetter(letter);
-    console.log(letter);
+  const handleWordSubmit = async () => {
+    const response = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${wordInput}`
+    );
+    const data = await response.json();
+    console.log(data);
+    if (data.title === "No Definitions Found") {
+      console.log("No Definitions Found");
+    } else {
+      setWordBoard([...wordBoard, wordInput]);
+      console.log(wordBoard);
+      setWordInput("");
+    }
   };
-
-  //two words, 5 letters each
-  //set timer for 1 minute
-  //players come with words using the letter in the two words
-  //if the word is valid, it will be added to the board
-  //players receive points for each word they add based on the length of the word
-  //if the word is not valid, they lose points
 
   const handleGenerateWordLadder = async () => {
     // Connect to API to get list of valid English words
     const response = await fetch(
-      `https://random-word-api.herokuapp.com/word?number=2&length=5`
+      `https://random-word-api.herokuapp.com/word?number=3&length=5`
     );
     const data = await response.json();
     const validWords = data;
-    setWordsDisplayed(validWords)
+    setWordOne(validWords[0].split(""));
+    setWordTwo(validWords[1].split(""));
+    setWordThree(validWords[2].split(""));
   };
 
-  const handleLetterClick = (index: number) => {
-    setLetterPosition(index);
+  const handleLetterClick = (letter: string) => {
+    setWordInput(wordInput + letter);
+    console.log(wordInput);
   };
 
   return (
     <div className="container justify-center items-center h-screen mx-auto">
-      <div>
-        <h1 className="text-4xl text-center">Word Ladder</h1>
+      <div className="mb-20">
+        <h1 className="text-4xl text-center">Wordzo</h1>
       </div>
 
+      <div className="h-10 flex justify-center">{wordInput}</div>
+
       <div className="flex flex-col justify-center items-center">
-        <div className="flex space-x-2">
-          {wordsDisplayed.map((letter, index) => (
+        <div className="flex space-x-2 mb-5">
+          {wordOne.map((letter, index) => (
             <div
               key={index}
-              className="p-2 border-2 border-gray-600 mb-20 w-10 h-10 flex justify-center items-center"
-              onClick={() => handleLetterClick(index)}
+              className="p-2 border-2 border-gray-600 w-10 h-10 flex justify-center items-center cursor-pointer"
+              onClick={() => handleLetterClick(letter)}
             >
               {letter}
             </div>
           ))}
         </div>
-        <div className="bg-gray-950">
-          <Keyboard handleLetterChange={handleLetterChange} />
+        <div className="flex space-x-2 mb-5">
+          {wordTwo.map((letter, index) => (
+            <div
+              key={index}
+              className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
+              onClick={() => handleLetterClick(letter)}
+            >
+              {letter}
+            </div>
+          ))}
         </div>
-        <button onClick={handleGenerateWordLadder}>CLICK</button>
+        <div className="flex space-x-2 mb-10">
+          {wordThree.map((letter, index) => (
+            <div
+              key={index}
+              className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
+              onClick={() => handleLetterClick(letter)}
+            >
+              {letter}
+            </div>
+          ))}
+        </div>
+        <div>
+          <button onClick={handleWordSubmit}>Submit</button>
+        </div>
+        <button onClick={handleGenerateWordLadder}>START</button>
       </div>
     </div>
   );
