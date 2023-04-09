@@ -48,6 +48,10 @@ function App() {
     console.log(wordInput);
   };
 
+  const handleInputClear = () => {
+    setWordInput("");
+  };
+
   return (
     <div className="container flex flex-col items-center h-screen mx-auto bg-blue-400">
       <div className="mb-20">
@@ -81,8 +85,19 @@ function App() {
                 ))}
               </div>
             ))}
-            <div>
-              <button onClick={handleWordSubmit}>Submit</button>
+            <div className="space-x-2">
+              <button
+                className="border p-2 bg-green-500"
+                onClick={handleWordSubmit}
+              >
+                Submit
+              </button>
+              <button
+                className="border p-2 bg-red-500"
+                onClick={handleInputClear}
+              >
+                Clear
+              </button>
             </div>
             <button onClick={handleGenerateWordLadder}>START</button>
           </div>
