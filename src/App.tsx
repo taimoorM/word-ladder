@@ -1,12 +1,9 @@
 import { useState } from "react";
-import Keyboard from "./components/Keyboard";
 
 type letterPositionType = number | null;
 
 function App() {
-  const [wordOne, setWordOne] = useState([]);
-  const [wordTwo, setWordTwo] = useState([]);
-  const [wordThree, setWordThree] = useState([]);
+  const [words, setWords] = useState<string[][]>([]);
   const [wordBoard, setWordBoard] = useState<string[]>([]);
   const [wordInput, setWordInput] = useState<string>("");
 
@@ -26,15 +23,17 @@ function App() {
   };
 
   const handleGenerateWordLadder = async () => {
+    setWordBoard([]);
+    setWords([]);
     // Connect to API to get list of valid English words
     const response = await fetch(
       `https://random-word-api.herokuapp.com/word?number=3&length=5`
     );
     const data = await response.json();
-    const validWords = data;
-    setWordOne(validWords[0].split(""));
-    setWordTwo(validWords[1].split(""));
-    setWordThree(validWords[2].split(""));
+    for (let i = 0; i < data.length; i++) {
+      setWords((words) => [...words, data[i].split("")]);
+    }
+    console.log(words);
   };
 
   const handleLetterClick = (letter: string) => {
@@ -48,28 +47,33 @@ function App() {
         <h1 className="text-4xl text-center">Wordzo</h1>
       </div>
       <div className="flex w-full justify-center">
-        <div className="flex flex-col mr-32 w-[150px] border border-gray-800">
-          {wordBoard.map((word) => (
-            <div>{word}</div>
+        <div className="flex flex-col mr-32 w-[150px] border border-gray-800 p-2 space-y-2">
+          {wordBoard.map((word, index) => (
+            <div>
+              <span>{index + 1}.</span> {word}
+            </div>
           ))}
         </div>
         <div>
           <div className="h-10 flex justify-center">{wordInput}</div>
 
           <div className="flex flex-col justify-center items-center">
-            <div className="flex space-x-2 mb-5">
-              {wordOne.map((letter, index) => (
-                <div
-                  key={index}
-                  className="p-2 border-2 border-gray-600 w-10 h-10 flex justify-center items-center cursor-pointer"
-                  onClick={() => handleLetterClick(letter)}
-                >
-                  {letter}
-                </div>
-              ))}
-            </div>
-            <div className="flex space-x-2 mb-5">
-              {wordTwo.map((letter, index) => (
+            {words.map((word) => (
+              <div className="flex space-x-2 mb-5">
+                {word.map((letter, i) => (
+                  <div
+                    key={i}
+                    className="p-2 border-2 border-gray-600 w-10 h-10 flex justify-center items-center cursor-pointer"
+                    onClick={() => handleLetterClick(letter)}
+                  >
+                    {letter}
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            {/* <div className="flex space-x-2 mb-5">
+              {words[1].map((letter, index) => (
                 <div
                   key={index}
                   className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
@@ -80,7 +84,7 @@ function App() {
               ))}
             </div>
             <div className="flex space-x-2 mb-10">
-              {wordThree.map((letter, index) => (
+              {words.map((letter, index) => (
                 <div
                   key={index}
                   className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
@@ -89,7 +93,7 @@ function App() {
                   {letter}
                 </div>
               ))}
-            </div>
+            </div> */}
             <div>
               <button onClick={handleWordSubmit}>Submit</button>
             </div>
