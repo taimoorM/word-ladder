@@ -43,51 +43,59 @@ function App() {
   };
 
   return (
-    <div className="container justify-center items-center h-screen mx-auto">
+    <div className="container flex flex-col items-center h-screen mx-auto bg-blue-400">
       <div className="mb-20">
         <h1 className="text-4xl text-center">Wordzo</h1>
       </div>
-
-      <div className="h-10 flex justify-center">{wordInput}</div>
-
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex space-x-2 mb-5">
-          {wordOne.map((letter, index) => (
-            <div
-              key={index}
-              className="p-2 border-2 border-gray-600 w-10 h-10 flex justify-center items-center cursor-pointer"
-              onClick={() => handleLetterClick(letter)}
-            >
-              {letter}
-            </div>
-          ))}
-        </div>
-        <div className="flex space-x-2 mb-5">
-          {wordTwo.map((letter, index) => (
-            <div
-              key={index}
-              className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
-              onClick={() => handleLetterClick(letter)}
-            >
-              {letter}
-            </div>
-          ))}
-        </div>
-        <div className="flex space-x-2 mb-10">
-          {wordThree.map((letter, index) => (
-            <div
-              key={index}
-              className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
-              onClick={() => handleLetterClick(letter)}
-            >
-              {letter}
-            </div>
+      <div className="flex w-full justify-center">
+        <div className="flex flex-col mr-32 w-[150px] border border-gray-800">
+          {wordBoard.map((word) => (
+            <div>{word}</div>
           ))}
         </div>
         <div>
-          <button onClick={handleWordSubmit}>Submit</button>
+          <div className="h-10 flex justify-center">{wordInput}</div>
+
+          <div className="flex flex-col justify-center items-center">
+            <div className="flex space-x-2 mb-5">
+              {wordOne.map((letter, index) => (
+                <div
+                  key={index}
+                  className="p-2 border-2 border-gray-600 w-10 h-10 flex justify-center items-center cursor-pointer"
+                  onClick={() => handleLetterClick(letter)}
+                >
+                  {letter}
+                </div>
+              ))}
+            </div>
+            <div className="flex space-x-2 mb-5">
+              {wordTwo.map((letter, index) => (
+                <div
+                  key={index}
+                  className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
+                  onClick={() => handleLetterClick(letter)}
+                >
+                  {letter}
+                </div>
+              ))}
+            </div>
+            <div className="flex space-x-2 mb-10">
+              {wordThree.map((letter, index) => (
+                <div
+                  key={index}
+                  className="p-2 border-2 border-gray-600  w-10 h-10 flex justify-center items-center cursor-pointer"
+                  onClick={() => handleLetterClick(letter)}
+                >
+                  {letter}
+                </div>
+              ))}
+            </div>
+            <div>
+              <button onClick={handleWordSubmit}>Submit</button>
+            </div>
+            <button onClick={handleGenerateWordLadder}>START</button>
+          </div>
         </div>
-        <button onClick={handleGenerateWordLadder}>START</button>
       </div>
     </div>
   );
