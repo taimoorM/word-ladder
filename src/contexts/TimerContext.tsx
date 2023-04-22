@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface TimerContextProps {
   time: number;
-  timerRunning: boolean;
+  timeEnd: boolean;
   startTimer: () => void;
   pauseTimer: () => void;
   resetTimer: () => void;
@@ -13,17 +13,16 @@ const TimerContext = createContext<TimerContextProps | undefined>(undefined);
 
 interface TimerProviderProps {
   initialTime: number;
-  onTimeEnd: () => void;
   children: React.ReactNode;
 }
 
 export const TimerProvider = ({
   initialTime,
-  onTimeEnd,
   children,
 }: TimerProviderProps) => {
   const [time, setTime] = useState<number>(initialTime);
   const [timerRunning, setTimerRunning] = useState<boolean>(false);
+  const [timeEnd, setTimeEnd] = useState(false);
 
   const startTimer = () => {
     setTimerRunning(true);
@@ -36,17 +35,18 @@ export const TimerProvider = ({
   const resetTimer = () => {
     setTimerRunning(false);
     setTime(initialTime);
+    setTimeEnd(false);
   };
 
   useEffect(() => {
-    let timer: number;
+    let timer: NodeJS.Timeout | null = null;
     if (timerRunning && time > 0) {
       timer = setTimeout(() => {
         setTime(time - 1);
       }, 1000);
     } else if (timerRunning && time === 0) {
       setTimerRunning(false);
-      if (onTimeEnd) onTimeEnd();
+      setTimeEnd(true);
     }
 
     return () => {
@@ -54,11 +54,11 @@ export const TimerProvider = ({
         clearTimeout(timer);
       }
     };
-  }, [time, timerRunning, onTimeEnd]);
+  }, [time, timerRunning]);
 
   return (
     <TimerContext.Provider
-      value={{ time, timerRunning, startTimer, pauseTimer, resetTimer }}
+      value={{ time, timeEnd, startTimer, pauseTimer, resetTimer }}
     >
       {children}
     </TimerContext.Provider>
